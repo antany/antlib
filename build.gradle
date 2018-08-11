@@ -1,0 +1,87 @@
+apply plugin: 'maven'
+apply plugin: 'signing'
+apply plugin: 'java-library'
+
+
+dependencies {
+	testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+compileJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+repositories {
+    jcenter()
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+group = "io.github.antany"
+archivesBaseName = "antlib"
+version = "0.0.2.jre8"
+
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+        authentication(userName: ossrhUsername, password: ossrhPassword)
+      }
+
+      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+        authentication(userName: ossrhUsername, password: ossrhPassword)
+      }
+
+      pom.project {
+        name 'antlib'
+        packaging 'jar'
+        
+        description 'its done to reduce lot of repeated java code'
+        
+        url 'https://github.com/antany/antlib'
+
+        scm {
+          connection 'https://github.com/antany/antlib.git'
+          developerConnection 'https://github.com/antany/antlib.git'
+          url 'https://github.com/antany/antlib'
+        }
+
+        licenses {
+          license {
+            name 'The Apache License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          }
+        }
+
+		 developers {
+          developer {
+            id 'antany'
+            name 'Antany'
+            email 'antany@ymail.com'
+          }
+        }
+        
+      }
+    }
+  }
+}
