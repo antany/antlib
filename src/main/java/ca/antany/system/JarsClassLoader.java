@@ -15,6 +15,8 @@ import java.util.Enumeration;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
+//Code logic taken from eclipse jdt project and cutomized for my purpose
+
 public class JarsClassLoader {
 
 	static final String INTERNAL_URL_PROTOCOL_WITH_COLON = "antlib:";
